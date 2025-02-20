@@ -40,20 +40,41 @@ def timestr():
     localtime = time.localtime()
     return "{}_{}-{}_{}".format(localtime.tm_mon, localtime.tm_mday, localtime.tm_hour, localtime.tm_min)
 
+def get_size(start_path = '.'):
+    total_size = 0
+    for dirpath, dirnames, filenames in os.walk(start_path):
+        for f in filenames:
+            fp = os.path.join(dirpath, f)
+            # skip if it is symbolic link
+            if not os.path.islink(fp):
+                total_size += os.path.getsize(fp)
+
+    return total_size # in bytes
 
 def main(args):
     d = f"../failure-catalog/{args.model}/"
     if args.failure:
         f = args.failure.split(",")
-        ds = [d+i+"/" for i in f]
+        tracedirs = [d+i+"/" for i in f]
     else:
-        ds = [d + i for i in os.listdir(d) if os.path.isdir(d+i)]
-    print(ds)
+        tracedirs = [d + i for i in os.listdir(d) if os.path.isdir(d+i)]
+    # print(tracedirs)
+    tracedict = dict.fromkeys(tracedirs, {'size': 0, "time": 0.0, "samples": 0})
+    for td in tracedirs:
+        tracedict[td]["size"] = get_size(td)
+        tracedict[td]["samples"] = sum([1 for i in os.listdir(td) if ".jpg" in i])
+        tracedict[td]["time"] = tracedict[td]["samples"] / 5.0
+    for td in tracedirs:
+        print(td)
+        print("\tSize on disk:", tracedict[td]["size"] / 1048576.0, "MB")
+        print("\tTime elapsed:", tracedict[td]["time"], "seconds")
+        print("\tTotal samples:", tracedict[td]["samples"])
     if args.training_metas:
         modelsubdir = ["../pretrained-models/" + i for i in os.listdir("../pretrained-models") if args.model+"-" in i][0]
         modeldir = f"../pretrained-models/{args.model}/"
         a = [modeldir+ i for i in os.listdir(modeldir) if "metainfo.txt" in i][0]
-        print(a)
+        print(f"{i} training metas:\n{a}")
+    
 
 
 if __name__ == '__main__':

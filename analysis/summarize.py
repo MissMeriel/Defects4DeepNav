@@ -29,7 +29,7 @@ def parse_arguments():
                                 visual  mode visualizes each numerical trace variable as a histogram and boxplot.\
                                 conditional mode produces the statistical metrics conditioned upon the values of the variable -v, --target_variable  flag.')
     parser.add_argument('-o', "--outdir", type=str, default="./summarize-output/", help='directory in which to save output')
-    parser.add_argument('-v', '--target_variable', type=str, choices=['image name','linear_speed_x','angular_speed_z','is_turning','is_manually_off_course','lidar_ranges'])
+    parser.add_argument('-v', '--target_variable', type=str, choices=['image_name','linear_speed_x','angular_speed_z','is_turning','is_manually_off_course','lidar_ranges'])
     parser.add_argument('-l', '--training_metas', action="store_true", help="print out the training information for the model specified in -m,--model")
     parser.add_argument("-a", "--aggregate", action="store_true", help='takes the entire trace into consideration')
     parser.add_argument("-t", "--timestep", type=str, default="./summarize-output/", help='directory in which to save output')
