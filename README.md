@@ -20,25 +20,26 @@ It contains instructions to install, troubleshoot, and initialize the onboard da
 
 ## Catalog Summary
 
-| Model ID | Architecture     | Data Aug. \& Balancing | Inputs  | Dataset Size | Normalization | Epochs       | Loss Function  | Failures |
-| -------- | ---------------- | ---------------------- | ------- | ------------ | ------------- | ------------ | -------------- | -------- |
-| M1       | DAVE2            | :heavy_check_mark:     | 1       | 11.4K        | :x:           | 100          | MSE            | 13       |
-| M2       | DAVE2            | :heavy_check_mark:     | 1       | 11.4K        | :x:           | 100          | L1             | 4        |
-| M3       | DAVE2            | :x:                    | 1       | 11.4K        | ImageNet Norm | 100          | MSE            | 12       |
-| M4       | DAVE2            | :x:                    | 1       | 11.4K        | BatchNorm     | 100          | MSE            | 12       |
-| M5       | DAVE2            | :heavy_check_mark:     | 1       | 11.4K        | :x:           | convergence  | L1             | 2        |
-| M6       | MiniTransformer1 | :heavy_check_mark:     | 1       | 11.4K        | :x:           | 100          | MSE            | 12       |
-| M7       | MiniTransformer1 | :heavy_check_mark:     | 1       | 11.4K        | :x:           | convergence  | MSE            | 12       |
-| M8       | MiniTransformer1 | :heavy_check_mark:     | 1       | 11.4K        | BatchNorm     | 100          | MSE            | 12       |
-| M9       | DAVE2            | :heavy_check_mark:     | 1       | 30.5K        | :x:           | 100          | MSE            | 12       |
-| M10      | DAVE2            | :heavy_check_mark:     | 1       | 65.3K        | :x:           | convergence  | MSE            | 12       |
-| M11      | DAVE2            | :x:                    | 1       | 162.7K       | :x:           | 100          | MSE            | 5 laps w/o failure   |
-| M12      | MobileNet        | :heavy_check_mark:     | 1       | 30.5K        | ImageNet Norm | 100          | MSE            | 12       |
-| M13      | MobileNet        | :x:                    | 1       | 30.5K        | ImageNet Norm | 100          | MSE            | 12       |
-| M14      | DAVE2            | :heavy_check_mark:     | 1       | 162.7K       | BatchNorm     | 100          | MSE            | 12       |
-| M15      | DAVE2            | :heavy_check_mark:     | 1       | 162.7K       | ImageNet Norm | 100          | MSE            | 12       |
-| M16      | ShuffleNet       | :heavy_check_mark:     | 1       | 162.7K       | ImageNet Norm | 100          | MSE            | TBD      |
-| M17      | ShuffleNet       | :x:                    | 1       | 162.7K       | ImageNet Norm | 100          | MSE            | TBD      |
+| Model ID | Architecture     | Data Aug. \& Balancing | Inputs  | Dataset Size | Normalization | Epochs       | Loss Function  | Failures | Notes    |
+| -------- | ---------------- | ---------------------- | ------- | ------------ | ------------- | ------------ | -------------- | -------- | -------- |
+| M1       | DAVE2            | :heavy_check_mark:     | 1       | 11.4K        | :x:           | 100          | MSE            | 13       |          |
+| M2       | DAVE2            | :heavy_check_mark:     | 1       | 11.4K        | :x:           | 100          | L1             | 4        | outputs near zero         |
+| M3       | DAVE2            | :x:                    | 1       | 11.4K        | ImageNet Norm | 100          | MSE            | 12       |          |
+| M4       | DAVE2            | :x:                    | 1       | 11.4K        | BatchNorm     | 100          | MSE            | 12       |          |
+| M5       | DAVE2            | :heavy_check_mark:     | 1       | 11.4K        | :x:           | convergence  | L1             | 2        | outputs near zero         |
+| M6       | MiniTransformer1 | :heavy_check_mark:     | 1       | 11.4K        | :x:           | 100          | MSE            | 12       |          |
+| M7       | MiniTransformer1 | :heavy_check_mark:     | 1       | 11.4K        | :x:           | convergence  | MSE            | 12       |          |
+| M8       | MiniTransformer1 | :heavy_check_mark:     | 1       | 11.4K        | BatchNorm     | 100          | MSE            | 12       |          |
+| M9       | DAVE2            | :heavy_check_mark:     | 1       | 30.5K        | :x:           | 100          | MSE            | 12       |          |
+| M10      | DAVE2            | :heavy_check_mark:     | 1       | 15.5K        | :x:           | convergence  | MSE            | 3        | only outputs small left values |
+| M11      | DAVE2            | :x:                    | 1       | 15.5K        | :x:           | 100          | MSE            | 3        | only outputs small left values |
+| M12      | MobileNetv2      | :heavy_check_mark:     | 1       | 51.2K        | ImageNet Norm | 100          | MSE            | TBD      |          |
+| M13      | MobileNetv2      | :x:                    | 1       | 51.2K        | ImageNet Norm | 100          | MSE            | TBD      |          |
+| M14      | DAVE2            | :heavy_check_mark:     | 1       | 152.2K       | :x:           | 100          | MSE            | 9        | 5 laps w/o failure, fails at sunset    |
+| M15      | MobileNetv2      | :heavy_check_mark:     | 1       | 152.2K       | ImageNet Norm | 100          | MSE            | TBD      |          |
+| M16      | ShuffleNet       | :heavy_check_mark:     | 1       | 152.2K       | ImageNet Norm | 100          | MSE            | TBD      |          |
+| M17      | DAVE2            | :heavy_check_mark:     | 1       | 152.2K       | ImageNet Norm | 100          | MSE            | TBD      |          |
+| M18      | DAVE2            | :heavy_check_mark:     | 1       | 152.2K       | :x:           | convergence  | MSE            | TBD      |          |
 
 ## Quickstart
 
