@@ -3,13 +3,16 @@ import argparse
 import pandas as pd
 import numpy as np
 import cv2
+from matplotlib import pyplot as plt
 
 '''
-The summarize  functionality enables trace summarization at various levels -- by model, attributes, or trace length -- to better group these traces and understand the behaviors exhibited by models under deployment. 
+The summarize  functionality enables trace summarization at various levels -- by model, attributes, or trace 
+length -- to better group these traces and understand the behaviors exhibited by models under deployment. 
 summarize  takes several flags: -mfdvat .
 The -mf  flags function like those in query  to specify model and failures.
 -d, --mode  specifies one of several modes: statistical , temporal ,  visual , and  conditional .
-statistical  mode summarizes the failure trace by mean, median, mode, standard deviation and variance, and range of each of the trace variables.
+statistical  mode summarizes the failure trace by mean, median, mode, standard deviation and variance, and 
+range of each of the trace variables.
 temporal  mode produces the statistical metrics in 5 second intervals.
 visual  mode visualizes each numerical trace variable as a histogram and boxplot.
 conditional mode produces the statistical metrics conditioned upon the values of the variable -v, --target_variable  flag.
@@ -17,6 +20,8 @@ Each mode can use the -a, --aggregate  flag which takes the entire trace into co
 They can also be run at the model level or summarize individual failures in aggregate. 
 The summarize  functionality can help to compare and differentiate traces, assisting with failure clustering and fault isolation.
 '''
+
+HZ = 5
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
@@ -53,30 +58,44 @@ def get_distribution_moments(arr):
 
 
 def statistical(df):
-    print(df.columns)
-    print("angular_speed_z:")
+    # print(df.columns)
     turning_mean = df.loc[:, 'angular_speed_z'].mean() 
     turning_var = df.loc[:, 'angular_speed_z'].var() 
-    print(turning_mean, turning_var, df.shape[0])
-    print("lidar_ranges:")
+    turning_min = df.loc[:, 'angular_speed_z'].min()
+    turning_max = df.loc[:, 'angular_speed_z'].max()
+    # print(turning_mean, turning_var, df.shape[0])
+    # print("lidar_ranges:")
     lidar_ranges_raw = [] #df.loc[:, 'lidar_ranges']
     for index, row  in df.iterrows():
         r = row['lidar_ranges']
         r_floats = [float(i) for i in r.split(" ")]
-        print(len(r_floats))
+        # print(len(r_floats))
         r_floats = filter(lambda x: x != float('-inf'), r_floats)
         # print(r_floats_filtered)
-        print("r_floats", r_floats)
+        # print("r_floats", r_floats)
         lidar_ranges_raw.append(r_floats_filtered)
 
     lidar_mean = np.mean(lidar_ranges_raw)
     lidar_var = np.var(lidar_ranges_raw)
-    print(lidar_mean, lidar_var)
-    # lidar_var = df.loc[:, 'lidar_ranges'].var()
-    # lidar_min = df.loc[:, 'lidar_ranges'].min()
-    # lidar_max = df.loc[:, 'lidar_ranges'].max()
-    # print(lidar_mean, lidar_var, lidar_min, lidar_max)
-    return turning_mean, turning_var
+    lidar_min = np.min(lidar_ranges_raw)
+    lidar_max = np.max(lidar_ranges_raw)
+    lidar_moments = get_distribution_moments(lidar_ranges_raw)
+    return df.shape[0], len(lidar_ranges_raw), turning_mean, turning_var, turning_min, turning_max, lidar_mean, lidar_var, lidar_min, lidar_max
+
+
+def temporal(df):
+    global HZ
+    return
+
+
+def conditional(df, condition={"angular_speed_z": -0.1}):
+    global HZ
+    return
+
+
+def visual(df):
+    global HZ
+    return
 
 
 def main(args):
@@ -91,12 +110,19 @@ def main(args):
     for fd in ds:
         csvfile = fd + "/data_cleaned.csv"
         df = pd.read_csv(csvfile)
-        
         dfs.append(df)
     concat_df = pd.concat(dfs)
     if args.mode == "statistical":
         results = statistical(concat_df)
-
+        print(f"Statistical analysis:\n\tTotal samples:{results[0]}\n\tAngular vel mean:{turning_mean}Angular vel var: \n\t{turning_var}Angular vel min:\n\t{turning_min}Angular vel max:\n\t{turning_max}\n\tLidar non-inf samples:{results[1]}\n\tLiDAR mean: {lidar_mean}\n\tLiDAR var: {lidar_var}\n\tLiDAR min: {lidar_min}\n\tLiDAR max: {lidar_max}")
+    elif args.mode == "temporal":
+        pass
+    elif args.mode == "visual":
+        visual(concat_dfs)
+    elif args.mode == "conditional":
+        pass
+    else:
+        print("Choose one of the summarization modes: statistical, temporal, visual or conditional")
     if args.training_metas:
         modelsubdir = ["../pretrained-models/" + i for i in os.listdir("../pretrained-models") if args.model+"-" in i][0]
         modeldir = f"../pretrained-models/{args.model}/"

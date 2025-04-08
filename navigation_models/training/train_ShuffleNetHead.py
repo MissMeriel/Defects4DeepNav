@@ -178,7 +178,7 @@ def main():
                 f"{device=}\n"
                 f"{args.robustification=}\n"
                 f"{args.noisevar=}\n"
-                f"dataset_moments={dataset_moments}\n"
+                # f"dataset_moments={dataset_moments}\n"
                 f"{time_to_train=}\n"
                 f"dirs={dataset.get_directories()}")
 

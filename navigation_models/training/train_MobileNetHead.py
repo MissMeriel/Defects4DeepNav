@@ -90,7 +90,7 @@ def main():
     outdir = f"./mobilenet-training-output/{model._get_name()}-{randstr()}-{timestr()}-{args.slurmid}/"
     os.makedirs(outdir, exist_ok=True)
     shutil.copy(__file__, outdir+"/"+Path(__file__).name)
-    iteration = f'{model._get_name()}-{input_shape[0]}x{input_shape[1]}-loss{args.lossfxn}-aug{args.robustification}-converge{args.convergence}-{args.epochs}epoch-{args.batch}batch-{int(sum(dataset.cumulative_sizes)/1000)}Ksamples'
+    iteration = f'{model._get_name()}-{input_shape[0]}x{input_shape[1]}-loss{args.lossfxn}-aug{args.robustification}-converge{args.convergence}-{args.epochs}epoch-{args.batch}batch-{int(dataset.cumulative_sizes[-1]/1000)}Ksamples'
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"{iteration=}")
     print(f"{device=}")
@@ -173,7 +173,7 @@ def main():
     # save metainformation about training
     with open(f'./{outdir}/model-{iteration}-metainfo.txt', "w") as f:
         f.write(f"{model_name=}\n"
-                f"total_samples={sum(dataset.cumulative_sizes)}\n"
+                f"total_samples={(dataset.cumulative_sizes[-1])}\n"
                 f"{args.epochs=}\n"
                 f"{args.lr=}\n"
                 f"{args.batch=}\n"
