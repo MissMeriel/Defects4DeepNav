@@ -146,7 +146,7 @@ class MultiDirectoryDataSequence(data.Dataset):
             # plt.pause(0.01)
             image = gauss(image[None])[0]
         if random.random() > 0.5:
-            # darkness
+            # brightness
             contrast_factor = torch.rand(1).item() * 10 + 0.1
             image = torchvision.transforms.functional.adjust_brightness(image, contrast_factor)
         if random.random() > 0.5:
